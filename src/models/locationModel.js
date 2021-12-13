@@ -12,6 +12,9 @@ const locationSchema = new mongoose.Schema({
     coordinates: {
         type: [Number],
         required: false,
+    },
+    ratings: {
+        type: Number
     }
 }, {
     timestamps: true,
