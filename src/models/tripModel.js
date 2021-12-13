@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import locationSchema from "./location";
+const mongoose = require("mongoose");
+const locationSchema = require("./location");
 
 const tripSchema = new mongoose.Schema({
     title: {
@@ -15,4 +15,4 @@ const tripSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-const Trip = mongoose.model("trip", tripSchema);
+module.exports = mongoose.model("trip", tripSchema);
