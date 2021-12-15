@@ -1,6 +1,14 @@
 const mongoose = require("mongoose");
 
 const logsSchema = new mongoose.Schema({
+    location: {
+        type: String,
+        ref: "location"
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "auth"
+    },
     title: {
         type: String,
         required: true,
@@ -9,7 +17,10 @@ const logsSchema = new mongoose.Schema({
         type:String,
     },
     image: {
-        type: String
+        type: String,
+    },
+    ratings: {
+        type: Number
     },
     visitDate: {
         required: true,

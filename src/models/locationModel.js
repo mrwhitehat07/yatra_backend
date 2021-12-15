@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const locationSchema = new mongoose.Schema({
+    slug: {
+        type: String,
+        required: true,
+    },
     city: {
         type: String,
         required: true,
@@ -9,12 +13,13 @@ const locationSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    coordinates: {
-        type: [Number],
-        required: false,
+    lat: {
+        type: Number,
+        required: true,
     },
-    ratings: {
-        type: Number
+    lng: {
+        type: Number,
+        required: true,
     }
 }, {
     timestamps: true,

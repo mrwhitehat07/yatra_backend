@@ -7,8 +7,6 @@ const parser = express.json();
 const salt = process.env.SALT;
 const secretKey = process.env.SECRET_KEY;
 const transporter = require("../config/emailer.config");
-const { verifyToken } = require("../middlewares");
-const { createUserProfile } = require("../controllers/userController");
 
 router.post('/register', parser, async (req, res) => {
     const newUser = new User({
@@ -25,7 +23,7 @@ router.post('/register', parser, async (req, res) => {
                 html: "This is your code: "+7976
             })
             res.status(200).send({
-                message: "email sent for verification, please check",
+                message: "email sent for verification, please check & verify",
                 data: newUser
             });
         } else {
@@ -50,7 +48,7 @@ router.post("/login", parser, async (req, res) => {
             message: "Wrong credentials!"
         });
         
-        const access_token = await jwt.sign({uuid: user._id}, secretKey, {expiresIn: "12hr"});
+        const access_token = jwt.sign({uuid: user._id}, secretKey, {expiresIn: "12hr"});
 
         res.status(200).send({
             token: access_token, 
@@ -89,26 +87,5 @@ router.post("/verify", parser, async (req, res) => {
     }
 });
 
-router.get('/profile', [verifyToken], async (req, res) => {
-    try {
-        const profiles = await User.findOne({ _id: uid });
-        res.send(profiles);
-    } catch (error) {
-        res.send(error)
-    }
-});
-
-router.put('/profile', [parser, verifyToken], async (req, res) => {
-    const fullname = req.body.fullname;
-    const bio = req.body.bio;
-    const avtar = req.body.avtar;
-    const address = req.body.address;
-    try {
-        const profiles = await createUserProfile(uid, fullname, bio, avtar, address);        
-        res.send({message: "success", data: profiles});
-    } catch (error) {
-        res.send(error);
-    }  
-});
 
 module.exports = router;
