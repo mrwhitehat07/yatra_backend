@@ -9,6 +9,10 @@ const logsSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "auth"
     },
+    slug: {
+        type: String,
+        required: true,
+    },
     title: {
         type: String,
         required: true,
