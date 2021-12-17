@@ -1,5 +1,6 @@
 const express = require("express");
 const User = require("../models/userModel");
+const Token = require("../models/tokenModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
@@ -7,6 +8,7 @@ const parser = express.json();
 const salt = process.env.SALT;
 const secretKey = process.env.SECRET_KEY;
 const transporter = require("../config/emailer.config");
+const { saveToken } = require("../controllers/tokenController");
 
 router.post('/register', parser, async (req, res) => {
     const newUser = new User({
@@ -48,7 +50,9 @@ router.post("/login", parser, async (req, res) => {
             message: "Wrong credentials!"
         });
         
-        const access_token = jwt.sign({uuid: user._id}, secretKey, {expiresIn: "12hr"});
+        const access_token = jwt.sign({uuid: user._id}, secretKey, {expiresIn: "24hr"});
+        
+        await saveToken(user._id, access_token);
 
         res.status(200).send({
             token: access_token, 
@@ -57,6 +61,7 @@ router.post("/login", parser, async (req, res) => {
         });
      
     } catch (err) {
+        console.log(err);
         res.status(500).send(err);
     }
 });
