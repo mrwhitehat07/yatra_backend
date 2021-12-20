@@ -9,6 +9,10 @@ const tokenSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    type: {
+        type: String,
+        default: process.env.TOKEN,
+    },
     createdAt: {
         type: Date,
         default: Date.now,
