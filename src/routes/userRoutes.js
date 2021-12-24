@@ -9,6 +9,8 @@ const secretKey = process.env.SECRET_KEY;
 const { saveToken } = require("../controllers/tokenController");
 const { validateEmail, verificationToken, sendMail } = require("../controllers/globalController");
 const { verifyUser } = require("../middlewares");
+const cors = require("cors");
+const { corsOptions } = require("../config/cors.config");
 
 router.post('/register', parser, async (req, res) => {
     const email = req.body.email;
@@ -43,7 +45,7 @@ router.post('/register', parser, async (req, res) => {
     }
 });
 
-router.post("/login", parser, async (req, res) => {
+router.post("/login", [parser, cors(corsOptions)], async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     try {
