@@ -11,12 +11,15 @@ const authSchema = new mongoose.Schema({
         required: true,
     },
     role: {
-        type: [String],
+        type: String,
         default: "basic"
     },
     isVerified: {
         type: Boolean,
         default: false,
+    },
+    verifiedAt: {
+        type: Date
     }
 }, {
     timestamps: true,

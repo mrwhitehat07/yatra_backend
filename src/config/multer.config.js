@@ -10,7 +10,7 @@ const multerStorage = multer.diskStorage({
 });
 
 const multerFilter = (req, file, cb) => {
-    if (file.mimetype === "img/jpeg" || file.mimetype=== "img/png") {
+    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
       cb(null, true);
     } else {
       cb(new Error("Not a image file!!"), false);

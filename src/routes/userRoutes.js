@@ -86,7 +86,14 @@ router.get("/verify/:token", [verifyUser], async (req, res) => {
                 message: "You are already a verified user."
             });
        } else {
-            await User.updateOne({_id: user._id}, { $set: { isVerified: true } });
+            await User.updateOne(
+                {_id: user._id}, 
+                { 
+                    $set: { 
+                        isVerified: true,
+                        verifiedAt: Date.now()
+                    } 
+                });
             res.status(200).send({
                 message: "User Verified"
             });
@@ -96,5 +103,12 @@ router.get("/verify/:token", [verifyUser], async (req, res) => {
     }
 });
 
+router.put('/change-password', [verifyUser], async (req, res) => {
+
+});
+
+router.post('/forgot-password', async (req, res) => {
+
+});
 
 module.exports = router;

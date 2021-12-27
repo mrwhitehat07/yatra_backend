@@ -25,7 +25,7 @@ router.get('/profile', [verifyToken], async (req, res) => {
 router.post('/profile', [parser, verifyToken, upload.single('avtar')], async (req, res) => {
     const fullname = req.body.fullname;
     const bio = req.body.bio;
-    const avtar = req.body.avtar;
+    const avtar = req.file.filename;
     const address = req.body.address;
     try {
         const profiles = await createUserProfile(uid, fullname, bio, avtar, address);        
@@ -38,10 +38,10 @@ router.post('/profile', [parser, verifyToken, upload.single('avtar')], async (re
     }  
 });
 
-router.put('/profile', [parser, verifyToken,  upload.single('avtar')], async (req, res) => {
+router.put('/profile', [parser, verifyToken, upload.single('avtar')], async (req, res) => {
     const fullname = req.body.fullname;
     const bio = req.body.bio;
-    const avtar = req.body.avtar;
+    const avtar = req.file.filename;
     const address = req.body.address;
     try {
         const profiles = await updateUserProfile(uid, fullname, bio, avtar, address);        
