@@ -30,7 +30,7 @@ router.get("/logs/:slug", async (req, res) => {
 });
 
 // post log
-router.post("/logs", [parser, verifyToken], async (req, res) => {
+router.post("/logs", [verifyToken], async (req, res) => {
     const location = req.body.location;
     const title = req.body.title;
     const description = req.body.description;
@@ -48,7 +48,7 @@ router.post("/logs", [parser, verifyToken], async (req, res) => {
 });
 
 // update log
-router.put("/logs/:slug", [parser, verifyToken], async (req, res) => {
+router.put("/logs/:slug", [verifyToken], async (req, res) => {
     const location = req.body.location;
     const title = req.body.title;
     const description = req.body.description;
@@ -66,7 +66,7 @@ router.put("/logs/:slug", [parser, verifyToken], async (req, res) => {
 });
 
 // delete log
-router.delete("/logs/:slug", [parser, verifyToken], async (req, res) => {
+router.delete("/logs/:slug", [verifyToken], async (req, res) => {
     const slug = req.params.slug;
     try {
         const logs = await deleteLogs(slug);

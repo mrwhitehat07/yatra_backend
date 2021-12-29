@@ -3,16 +3,14 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
-const parser = express.json();
 const salt = process.env.SALT;
 const secretKey = process.env.SECRET_KEY;
 const { saveToken } = require("../controllers/tokenController");
 const { validateEmail, verificationToken, sendMail } = require("../controllers/globalController");
-const { verifyUser } = require("../middlewares");
-const cors = require("cors");
-const { corsOptions } = require("../config/cors.config");
+const { verifyUser, verifyToken } = require("../middlewares");
+const { updatePassword, resetPassword, forgotPassword } = require("../controllers/passwordController");
 
-router.post('/register', parser, async (req, res) => {
+router.post('/register', async (req, res) => {
     const email = req.body.email;
     const password = await bcrypt.hash(req.body.password, parseInt(salt));
     const newUser = new User({
@@ -45,7 +43,7 @@ router.post('/register', parser, async (req, res) => {
     }
 });
 
-router.post("/login", [parser, cors(corsOptions)], async (req, res) => {
+router.post("/login", async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     try {
@@ -103,12 +101,38 @@ router.get("/verify/:token", [verifyUser], async (req, res) => {
     }
 });
 
-router.put('/change-password', [verifyUser], async (req, res) => {
-
+router.put('/change-password', [verifyToken], async (req, res) => {
+    const curPassword = req.body.curPassword;
+    const newPassword = req.body.newPassword;
+    const cnfPassword = req.body.cnfPassword;
+    try {
+        const status = await updatePassword(uid, curPassword, newPassword, cnfPassword);
+        res.send({ message: status });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error)
+    }
 });
 
 router.post('/forgot-password', async (req, res) => {
+    const email = req.body.email;
+    try {
+        const status = await forgotPassword(email);
+        res.send({ message: status });
+    } catch (error) {
+        res.status(500).send(error)
+    }
+});
 
+router.post('/reset-password/:token', verifyToken, async (req, res) => {
+    const newPassword = req.body.newPassword;
+    const cnfPassword = req.body.cnfPassword;
+    try {
+        const status = await resetPassword(uid, newPassword, cnfPassword);
+        res.send({ message: status });
+    } catch (error) {
+        res.status(500).send(error)
+    }
 });
 
 module.exports = router;

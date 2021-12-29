@@ -14,7 +14,13 @@ const tripSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    address: locationSchema,
+    address: {
+        type: String,
+        ref: "auth"
+    },
+    invitationLink: {
+        type: String,
+    },
     visitDate: {
         type: Date,
         required: true

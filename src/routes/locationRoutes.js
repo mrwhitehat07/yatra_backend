@@ -30,7 +30,7 @@ router.get("/locations/:slug", async (req, res) => {
     }
 });
 
-router.post("/locations", parser, async (req, res) => {
+router.post("/locations", async (req, res) => {
     const city = req.body.city;
     const country = req.body.country;
     const lat = req.body.lat;
@@ -47,7 +47,7 @@ router.post("/locations", parser, async (req, res) => {
     }
 });
 
-router.put("/locations/:slug", parser, async (req, res) => {
+router.put("/locations/:slug", async (req, res) => {
     const city = req.body.city;
     const country = req.body.country;
     const lat = req.body.lat;

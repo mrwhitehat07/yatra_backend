@@ -3,7 +3,6 @@ const router = express.Router();
 const { createUserProfile, updateUserProfile, deleteUserProfile } = require("../controllers/userController");
 const Profile = require("../models/profileModel");
 const { verifyToken } = require("../middlewares");
-const parser = express.json();
 const upload = require("../config/multer.config");
 
 router.get('/profile', [verifyToken], async (req, res) => {
@@ -22,14 +21,14 @@ router.get('/profile', [verifyToken], async (req, res) => {
     }
 });
 
-router.post('/profile', [parser, verifyToken, upload.single('avtar')], async (req, res) => {
+router.post('/profile', [verifyToken, upload.single('avtar')], async (req, res) => {
     const fullname = req.body.fullname;
     const bio = req.body.bio;
     const avtar = req.file.filename;
     const address = req.body.address;
     try {
         const profiles = await createUserProfile(uid, fullname, bio, avtar, address);        
-        res.send({
+        res.status(200).send({
             message: "profile created successfully", 
             data: profiles
         });
@@ -38,7 +37,7 @@ router.post('/profile', [parser, verifyToken, upload.single('avtar')], async (re
     }  
 });
 
-router.put('/profile', [parser, verifyToken, upload.single('avtar')], async (req, res) => {
+router.put('/profile', [verifyToken, upload.single('avtar')], async (req, res) => {
     const fullname = req.body.fullname;
     const bio = req.body.bio;
     const avtar = req.file.filename;

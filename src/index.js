@@ -5,6 +5,7 @@ require("dotenv").config({ path: path.resolve(__dirname, '../.env') });
 const port = process.env.PORT;
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.get('/', (req, res) => {
     res.json({
       message: 'Hello World!',
