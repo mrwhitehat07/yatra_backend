@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const locationSchema = require("./location");
+const Status = require("../config/trip.config");
 
 const tripSchema = new mongoose.Schema({
     host: {
@@ -14,12 +14,19 @@ const tripSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    description: {
+        type: String,
+    },
     address: {
         type: String,
-        ref: "auth"
+        ref: "location"
     },
     invitationLink: {
         type: String,
+    },
+    status: {
+        type: String,
+        default: Status.ACTIVE,
     },
     visitDate: {
         type: Date,

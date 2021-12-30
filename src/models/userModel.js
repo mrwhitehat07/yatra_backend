@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const ROLE = require("../config/role.config");
 
 const authSchema = new mongoose.Schema({
     email: {
@@ -12,7 +13,7 @@ const authSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        default: "basic"
+        default: ROLE.BASIC
     },
     isVerified: {
         type: Boolean,

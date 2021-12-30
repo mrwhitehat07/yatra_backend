@@ -32,9 +32,14 @@ const passwordResetMail = async (email, token) => {
     });
 }
 
+const generateInvitationLink = () => {
+    
+}
+
 module.exports = {
     validateEmail,
     sendMail,
     verificationToken,
     passwordResetMail,
+    generateInvitationLink,
 }

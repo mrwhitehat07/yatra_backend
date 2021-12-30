@@ -2,7 +2,6 @@ const express = require("express");
 const { verifyToken } = require("../middlewares");
 const Logs = require("../models/logsModel");
 const router = express.Router();
-const parser = express.json();
 const { createLogs, updateLogs, deleteLogs } = require("../controllers/logsController");
 
 // get all logs
