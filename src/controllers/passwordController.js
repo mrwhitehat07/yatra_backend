@@ -57,7 +57,7 @@ const forgotPassword = async (email) => {
 
 const resetPassword = async (uuid, newPassword, cnfPassword) => {
     if(isEmpty(`${newPassword}`) || isEmpty(`${cnfPassword}`)){
-        return "Something is missing";
+        return "Fields can't be empty";
     }
     else {
         if (newPassword == cnfPassword){

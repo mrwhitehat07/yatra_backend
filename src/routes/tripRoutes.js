@@ -2,59 +2,65 @@ const express = require("express");
 const { verifyToken } = require("../middlewares");
 const Trip = require("../models/tripModel");
 const router = express.Router();
-const { createTrips, updateTrips, deleteTrips } = require("../controllers/tripController");
+const { getTrips, createTrips, updateTrips, deleteTrips } = require("../controllers/tripController");
 
 router.get("/trip", verifyToken, async (req, res) => {
     try {
-        
+       const trips = await getTrips(uid);
+       res.send({
+           count: trips.length,
+           data: trips
+        }); 
+    } catch (error) {
+       res.status(500).send(error);
+    }
+});
+
+router.get("/trip/:id", verifyToken, async (req, res) => {
+    const id = req.params.id;
+    try {
+       const trip = await Trip.findOne({ _id: id });
+       res.send(trip); 
     } catch (error) {
        res.status(500).send(error);
     }
 });
 
 router.post("/trip", verifyToken, async (req, res) => {
-    const location = req.body.location;
     const title = req.body.title;
     const description = req.body.description;
     const address = req.body.address;
     const visitDate = req.body.visitDate;
     try {
-        const trip = await createTrips(uid, location, title, description, address, visitDate);        
-        res.status(201).send({
-            message: "trip created successfully", 
-            data: trip
-        });
+        const trip = await createTrips(uid, title, description, address, visitDate);        
+        res.status(201).send({ message: trip });
     } catch (error) {
         res.send(error);
     }  
 });
 
-router.put("/add-members", verifyToken, async (req, res) => {
-
-});
-
-router.put("/trip/:slug", verifyToken, async (req, res) => {
-    const location = req.body.location;
+router.put("/trip/:id", verifyToken, async (req, res) => {
+    const tid = req.params.id;
+    const location = req.body.address;
     const title = req.body.title;
     const description = req.body.description;
-    const image = req.body.image;
     const visitDate = req.body.visitDate;
     try {
-        const logs = await updateTrips(uid, location, title, description, image, visitDate);        
+        const trip = await updateTrips(uid, tid, location, title, description, visitDate);        
         res.send({
-            message: "trip updated successfully", 
+            message: trip, 
         });
     } catch (error) {
         res.send(error);
     }
 });
 
-router.delete("/trip/:slug", verifyToken, async (req, res) => {
-    const slug = req.params.slug;
+router.delete("/trip/:id", verifyToken, async (req, res) => {
+    const id = req.params.id;
     try {
-        const logs = await deleteTrips(slug);
+        const trip = await deleteTrips(uid, id);
         res.status(204).send({
-            message: "trip cancelled", 
+            message: trip
         });
     } catch (error) {
        res.status(500).send(error);
