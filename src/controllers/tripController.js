@@ -26,7 +26,7 @@ const createTrips = async (uuid, title, description, address, visitDate) => {
 const updateTrips = async (uuid, tid, address, title, description, visitDate) => {
     const trip = await Trip.findOne({ _id: tid });    
     if(!(trip.host.equals(uuid._id))){
-       return "You cannot change trips plans";
+        return "You cannot change trips plans";
     }
     else {
         await Trip.updateOne(

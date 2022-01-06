@@ -34,5 +34,5 @@ const deleteUserProfile = async (uuid) => {
 module.exports = {
     createUserProfile,
     updateUserProfile,
-    deleteUserProfile
+    deleteUserProfile,
 }

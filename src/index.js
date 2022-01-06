@@ -1,11 +1,14 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, '../.env') });
 const port = process.env.PORT;
+const { corsOptions } = require("./config/cors.config");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cors(corsOptions));
 app.get('/', (req, res) => {
     res.json({
       message: 'Hello World!',
