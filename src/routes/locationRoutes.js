@@ -36,6 +36,7 @@ router.post("/locations", async (req, res) => {
     const lat = req.body.lat;
     const lng = req.body.lng;
     const ratings = req.body.ratings;
+    const image = req.body.image;
     try {
         const locations = await addLocations(city, country, lat, lng, ratings);
         res.status(201).send({

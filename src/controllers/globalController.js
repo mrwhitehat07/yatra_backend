@@ -93,7 +93,7 @@ const sendMail = async (email, token) => {
 }
 
 const passwordResetMail = async (email, token) => {
-    const url = `http://localhost:8000/api/reset-password/${token}`;
+    const url = `http://localhost:3000/reset-password/${token}`;
     await transporter.sendMail({
         to: email, 
         subject: "Reset password",

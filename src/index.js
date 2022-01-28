@@ -4,11 +4,19 @@ const cors = require("cors");
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, '../.env') });
 const port = process.env.PORT;
-const { corsOptions } = require("./config/cors.config");
+const corsConfig = require("./config/cors.config");
 
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors(corsOptions));
+
+app.use(function(req, res, next) {
+       res.header("Access-Control-Allow-Origin", "*");
+       res.header("Access-Control-Allow-Headers", "X-Requested-With");
+       res.header('Access-Control-Allow-Headers', 'Content-Type');
+       next();
+});
+
 app.get('/', (req, res) => {
     res.json({
       message: 'Hello World!',

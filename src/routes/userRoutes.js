@@ -22,10 +22,8 @@ router.post('/register', async (req, res) => {
             const user = await User.findOne({email: email});
             if(!user) {
                 const newuser = await newUser.save();
-                const token = verificationToken(newuser._id);
-                await sendMail(newuser.email, token);
                 res.status(200).send({
-                    message: "email sent for verification, please check & verify",
+                    message: "registered successfully",
                     data: newUser
                 });
             }else{
@@ -49,7 +47,7 @@ router.post("/login", async (req, res) => {
     try {
         if(validateEmail(email) == true){
             const user = await User.findOne({ email: email });
-            !user && res.status(400).send({
+            !user && res.status(404).send({
                 message: "Not found!"
             });
         
@@ -61,7 +59,6 @@ router.post("/login", async (req, res) => {
             const access_token = jwt.sign({uuid: user._id}, secretKey, {expiresIn: process.env.TOKEN_EXPIRE});
             
             await saveToken(user._id, access_token);
-
             res.status(200).send({
                 token: access_token, 
                 message: "success", 
@@ -124,14 +121,31 @@ router.post('/forgot-password', async (req, res) => {
     }
 });
 
-router.post('/reset-password/:token', verifyToken, async (req, res) => {
+router.post('/reset-password/:token', async (req, res) => {
+    const token = req.params.token;
     const newPassword = req.body.newPassword;
     const cnfPassword = req.body.cnfPassword;
+    const userData = jwt.verify(token, process.env.VERIFICATION_KEY);
+    uid = User.findOne({ _id: userData.uuid })
     try {
         const status = await resetPassword(uid, newPassword, cnfPassword);
         res.send({ message: status });
     } catch (error) {
         res.status(500).send(error)
+    }
+});
+
+router.post('/verify-email', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findOne({ _id: uid });
+        await sendMail(user.email, token);
+        res.status(200).send({
+            message: "email sent for verification, please check & verify",
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: "Internal server error"
+        });
     }
 });
 
