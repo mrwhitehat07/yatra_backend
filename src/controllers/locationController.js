@@ -1,13 +1,14 @@
 const Location = require("../models/locationModel");
 
-const addLocations = async (city, country, lat, lng, ratings) => {
+const addLocations = async (city, country, lat, lng, ratings, image) => {
     const location = new Location({
         slug: city.toLowerCase() + "-" + country.toLowerCase(),
         city: city, 
         country: country, 
         lat: lat,
         lng: lng,
-        ratings: ratings
+        ratings: ratings,
+        image: image
     });
     await location.save();
 }
@@ -27,6 +28,17 @@ const updateLocations = async (slug, city, country, lat, lng, ratings) => {
     );
 }
 
+const updateLocationImage = async (slug, image) => {
+    await Location.updateOne(
+        { slug: slug }, 
+        { 
+            $set: {
+                image: (image != null) ? image : this.image,
+            }
+        },
+    );
+}
+
 const deleteLocations = async (slug) => {
     await Location.deleteOne({ slug: slug });
 }
@@ -34,5 +46,6 @@ const deleteLocations = async (slug) => {
 module.exports = {
     addLocations,
     updateLocations,
+    updateLocationImage,
     deleteLocations
 }
