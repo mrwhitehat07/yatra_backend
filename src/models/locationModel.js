@@ -17,6 +17,9 @@ const locationSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    image_id: {
+        type: String,
+    },
     lat: {
         type: Number,
     },

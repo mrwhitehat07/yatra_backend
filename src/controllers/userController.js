@@ -1,14 +1,15 @@
 const User = require("../models/userModel");
 const Profile = require("../models/profileModel");
 
-const createUserProfile = async (uuid, fullname, bio, avtar, address) => {
+const createUserProfile = async (uuid, fullname, bio, avtar, address, avtar_id) => {
     const user = await User.findOne({ _id: uuid });
     const profile = Profile({
         user: user._id,
         fullname: fullname,
         bio: bio,
         avtar: avtar,
-        address: address
+        address: address,
+        avtar_id, avtar_id
     });
     await profile.save();
 }

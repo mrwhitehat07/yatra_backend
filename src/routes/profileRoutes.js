@@ -4,6 +4,7 @@ const { createUserProfile, updateUserProfile, deleteUserProfile } = require("../
 const Profile = require("../models/profileModel");
 const { verifyToken } = require("../middlewares");
 const upload = require("../config/multer.config");
+const cloudinary = require("../config/cloudinary.config");
 
 router.get('/profile', [verifyToken], async (req, res) => {
     try {
@@ -24,10 +25,11 @@ router.get('/profile', [verifyToken], async (req, res) => {
 router.post('/profile', [verifyToken, upload.single('avtar')], async (req, res) => {
     const fullname = req.body.fullname;
     const bio = req.body.bio;
-    const avtar = req.file.filename;
+    const avtar = req.file.path;
     const address = req.body.address;
     try {
-        const profiles = await createUserProfile(uid, fullname, bio, avtar, address);        
+        const result = await cloudinary.uploader.upload(avtar);
+        const profiles = await createUserProfile(uid, fullname, bio, result.secure_url, address, result.public_id);        
         res.status(200).send({
             message: "profile created successfully", 
             data: profiles
