@@ -15,7 +15,7 @@ const createLogs = async (uuid, location, title, description, image, visitDate) 
     await logs.save();
 }
 
-const updateLogs = async (uuid, location, title, description, image, visitDate) => {
+const updateLogs = async (uuid, location, title, description, visitDate) => {
     await Logs.updateOne(
         {  user: uuid },
         { 
@@ -23,8 +23,18 @@ const updateLogs = async (uuid, location, title, description, image, visitDate) 
                 location: (location != null) ? location : this.location,
                 title: (title != null) ? title : this.title,
                 description: (description != null) ? description : this.description,
-                image: (image != null) ? image : this.image,
                 visitDate: (visitDate != null) ? visitDate : this.visitDate
+            }
+        }
+    );
+}
+
+const updateLogsImage = async (uuid, image) => {
+    await Logs.updateOne(
+        {  user: uuid },
+        { 
+            $set: {
+                image: (image != null) ? image : this.image,
             }
         }
     );
@@ -37,5 +47,6 @@ const deleteLogs = async (slug) => {
 module.exports = {
     createLogs,
     updateLogs,
-    deleteLogs
+    deleteLogs,
+    updateLogsImage,
 }

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Location = require("../models/locationModel");
-const { addLocations, updateLocations, deleteLocations } = require("../controllers/locationController");
+const { addLocations, updateLocations, deleteLocations, updateLocationImage } = require("../controllers/locationController");
 const upload = require("../config/multer.config");
 const cloudinary = require("../config/cloudinary.config");
 
@@ -49,10 +49,11 @@ router.post("/locations", upload.single('image'), async (req, res) => {
     const lat = req.body.lat;
     const lng = req.body.lng;
     const ratings = req.body.ratings;
+    const description = req.body.description;
     const image = req.file.path;
     try {
         const result = await cloudinary.uploader.upload(image);
-        const locations = await addLocations(city, country, lat, lng, ratings, result.secure_url, result.public_id);
+        const locations = await addLocations(city, country, lat, lng, ratings, result.secure_url, result.public_id, description);
         res.status(201).send({
             message: "success",
             data: locations
@@ -62,23 +63,45 @@ router.post("/locations", upload.single('image'), async (req, res) => {
     }
 });
 
-router.put("/locations/:slug", upload.single("image"), async (req, res) => {
+router.put("/locations/:slug", async (req, res) => {
     const city = req.body.city;
     const country = req.body.country;
     const lat = req.body.lat;
     const lng = req.body.lng;
     const ratings = req.body.ratings;
     const slug = req.params.slug;
-    const image = req.file.path;
+    const description = req.body.description;
 
     try {
+        const locations = await updateLocations(slug, city, country, lat, lng, ratings, description);
+        res.status(200).send({
+            message: locations
+        });
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
+router.put("/locations/:slug/image", upload.single("image"), async (req, res) => {
+    const image =  req.file.path;
+
+    try {
+        if (image != null){
+            const result = await cloudinary.uploader.upload(image);
+            const locations = await updateLocationImage(slug, result.secure_url);
+            res.status(201).send({
+                message: "location updated successfully",
+                data: locations
+            });
+        }
         const result = await cloudinary.uploader.upload(image);
-        const locations = await updateLocations(slug, city, country, lat, lng, ratings, result.secure_url);
+        const locations = await updateLocations(slug, city, country, lat, lng, ratings, result.secure_url, description);
         res.status(201).send({
             message: "location updated successfully",
             data: locations
         });
     } catch (error) {
+        console.log(error)
         res.status(500).send(error);
     }
 });
