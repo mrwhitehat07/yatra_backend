@@ -22,9 +22,9 @@ router.post('/register', async (req, res) => {
             const user = await User.findOne({email: email});
             if(!user) {
                 const newuser = await newUser.save();
-                res.status(200).send({
+                res.status(201).send({
                     message: "registered successfully",
-                    data: newUser
+                    data: newuser
                 });
             }else{
                 res.status(403).send({

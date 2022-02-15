@@ -60,7 +60,8 @@ const resetPassword = async (uuid, newPassword, cnfPassword) => {
         return "Fields can't be empty";
     }
     else {
-        if (newPassword === cnfPassword){
+        log(newPassword, cnfPassword)
+        if (newPassword == cnfPassword){
             await User.updateOne(
                 { _id: uuid },
                 {

@@ -6,6 +6,7 @@ const { createLogs, updateLogs, deleteLogs, updateLogsImage } = require("../cont
 const upload = require("../config/multer.config");
 const cloudinary = require("../config/cloudinary.config");
 const Location = require("../models/locationModel");
+const Profile = require("../models/profileModel");
 
 // get all logs
 router.get("/logs", async (req, res) => {
@@ -20,15 +21,39 @@ router.get("/logs", async (req, res) => {
     }
 });
 
+router.get("/logs/popular", async (req, res) => {
+    try {
+        const logs = await Logs.find({}).limit(4);
+        res.status(200).send({
+            count: logs.length,
+            data: logs
+        });
+    } catch (error) {
+       res.status(500).send(error);
+    }
+});
+
+router.get("/logs/me", verifyToken, async (req, res) => {
+    try {
+        const logs = await Logs.find({ user: uid._id });
+        res.status(200).send(logs);
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error);
+    }
+});
+
 // get specific log
 router.get("/logs/:slug", async (req, res) => {
     const slug = req.params.slug;
     try {
         const logs = await Logs.findOne({ slug: slug });
         const location = await Location.findOne({ slug: logs.location });
+        const profile = await Profile.findOne({ user: logs.user })
         res.status(200).send({ 
             logs: logs,
             location: location,
+            user: profile,
         });
     } catch (error) {
        res.status(500).send(error);
@@ -41,6 +66,7 @@ router.post("/logs", [verifyToken, upload.single('image')], async (req, res) => 
     const title = req.body.title;
     const description = req.body.description;
     const image = req.file.path;
+    console.log(image);
     const visitDate = req.body.visitDate;
     try {
         const result = await cloudinary.uploader.upload(image);

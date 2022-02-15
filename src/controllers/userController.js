@@ -21,8 +21,18 @@ const updateUserProfile = async (uuid, fullname, bio, avtar, address) => {
             $set: {
                 fullname: (fullname != null) ? fullname : this.fullname,
                 bio: (bio != null) ? bio : this.bio,
-                avtar: (avtar != null) ? avtar : this.avtar,
                 address: (address != null) ? address : this.addreess
+            }
+        },
+    );
+}
+
+const updateUserProfileImage = async (uuid, avtar) => {
+    await Profile.updateOne(
+        { user: uuid }, 
+        { 
+            $set: {
+                avtar: (avtar != null) ? avtar : this.avtar,
             }
         },
     );
@@ -36,4 +46,5 @@ module.exports = {
     createUserProfile,
     updateUserProfile,
     deleteUserProfile,
+    updateUserProfileImage,
 }
