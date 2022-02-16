@@ -13,6 +13,7 @@ const addLocations = async (city, country, lat, lng, ratings, image, image_id, d
         description: description,
     });
     await location.save();
+    return "success"
 }
 
 const updateLocations = async (slug, city, country, lat, lng, ratings, description) => {
