@@ -24,36 +24,24 @@ const createTrips = async (uuid, title, description, address, visitDate) => {
 }
 
 const updateTrips = async (uuid, tid, address, title, description, visitDate) => {
-    const trip = await Trip.findOne({ _id: tid });    
-    if(!(trip.host.equals(uuid._id))){
-        return "You cannot change trips plans";
-    }
-    else {
-        await Trip.updateOne(
-            {  _id: tid },
-            { 
-                $set: {
-                    address: (address != null) ? address : this.address,
-                    title: (title != null) ? title : this.title,
-                    description: (description != null) ? description : this.description,
-                    visitDate: (visitDate != null) ? visitDate : this.visitDate
-                }
+    await Trip.updateOne(
+        { $and: [{_id: tid}, {host: uuid._id}] },
+        { 
+            $set: {
+                address: (address != null) ? address : this.address,
+                title: (title != null) ? title : this.title,
+                description: (description != null) ? description : this.description,
+                visitDate: (visitDate != null) ? visitDate : this.visitDate
             }
-        );
-        return "Trips plans updated successfully";
-    }
-
+        }
+    );
+    return "Trips plans updated successfully";
 }
 
 const deleteTrips = async (uuid, tid) => {
-    const trip = await Trip.findOne({ _id: tid });    
-    if(!(trip.host.equals(uuid._id))){
-        return "You cannot cancel trips";
-     }
-     else {
-         await Trip.deleteOne({  _id: tid });
-         return "Trips cancelled successfully";
-     }
+    await Trip.deleteOne({ $and: [ {_id: tid}, {host: uuid._id} ]});
+    return "Trips cancelled successfully";
+     
 }
 
 module.exports = {
