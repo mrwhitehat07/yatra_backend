@@ -2,18 +2,23 @@ const TripRequest = require("../models/tripRequestModel");
 const Trip = require("../models/tripModel");
 
 const getRequest = async (email) => {
-    const user = await TripRequest.find({ user: email });
-    return user;
+    const request = await TripRequest.find({ user: email });
+    return request;
 }
 
 const sendRequest = async (email, trip, uid) => {
-    const request = TripRequest({ 
-        user: email,
-        trip: trip,
-        sender: uid
-    });
-    await request.save();
-    return "request sent";
+    try {
+        const request = TripRequest({ 
+            user: email,
+            trip: trip,
+            sender: uid
+        });
+        await request.save();
+        return "request sent";
+    }
+    catch (e) {
+        return e;
+    }
 }
 
 const acceptRequest = async (rid, tid, email) => {

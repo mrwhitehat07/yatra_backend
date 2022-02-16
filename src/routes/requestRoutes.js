@@ -20,7 +20,9 @@ router.post("/trip/:id/requests", verifyToken, async (req, res) => {
     const email = req.body.email;
     const user = uid;
     try {
-        const request = await sendRequest(email, request, user.email);        
+        const request = await sendRequest(email, trip, user.email);        
+        console.log(request)
+        console.log(user)
         if(request == "request sent"){
             res.status(201).send({ message: trip });
         }
@@ -33,7 +35,7 @@ router.post("/trip/:id/requests", verifyToken, async (req, res) => {
     }  
 });
 
-router.put("/requests/:id", verifyToken, async (req, res) => {
+router.put("/requests/:id/accept", verifyToken, async (req, res) => {
     const id = req.params.id;
     const user = uid;
     const tri = req.body.trip;
@@ -47,7 +49,7 @@ router.put("/requests/:id", verifyToken, async (req, res) => {
     }
 });
 
-router.put("/requests/:id", verifyToken, async (req, res) => {
+router.put("/requests/:id/decline", verifyToken, async (req, res) => {
     const id = req.params.id;
     const user = uid;
     try {
