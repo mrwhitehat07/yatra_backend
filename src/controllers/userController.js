@@ -2,9 +2,8 @@ const User = require("../models/userModel");
 const Profile = require("../models/profileModel");
 
 const createUserProfile = async (uuid, fullname, bio, avtar, address, avtar_id) => {
-    const user = await User.findOne({ _id: uuid });
     const profile = Profile({
-        user: user._id,
+        user: uuid._id,
         fullname: fullname,
         bio: bio,
         avtar: avtar,
@@ -12,11 +11,12 @@ const createUserProfile = async (uuid, fullname, bio, avtar, address, avtar_id) 
         avtar_id, avtar_id
     });
     await profile.save();
+    return "created";
 }
 
-const updateUserProfile = async (uuid, fullname, bio, avtar, address) => {
+const updateUserProfile = async (uuid, fullname, bio, address) => {
     await Profile.updateOne(
-        { user: uuid }, 
+        { user: uuid._id }, 
         { 
             $set: {
                 fullname: (fullname != null) ? fullname : this.fullname,
@@ -25,11 +25,12 @@ const updateUserProfile = async (uuid, fullname, bio, avtar, address) => {
             }
         },
     );
+    return "updated";
 }
 
 const updateUserProfileImage = async (uuid, avtar) => {
     await Profile.updateOne(
-        { user: uuid }, 
+        { user: uuid._id }, 
         { 
             $set: {
                 avtar: (avtar != null) ? avtar : this.avtar,
@@ -40,6 +41,7 @@ const updateUserProfileImage = async (uuid, avtar) => {
 
 const deleteUserProfile = async (uuid) => {
     await Profile.deleteOne({ user: uuid });
+    return "deleted";
 }
 
 module.exports = {

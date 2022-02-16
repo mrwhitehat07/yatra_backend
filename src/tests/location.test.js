@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Location = require("../models/locationModel");
 const { addLocations, updateLocations, deleteLocations } = require("../controllers/locationController");
 const url = 'mongodb://localhost:27017/web-api-test';
 
@@ -37,6 +36,12 @@ describe('Location testing', () => {
         const slug = "kathmandu-nepal";
         const res = await updateLocations(slug, city, country, lat, lng, rating, description);
         expect(res).toBe("Location updated");
+    });
+
+    it('expect location delete', async () => {
+        const slug = "kathmandu-nepal";
+        const res = await deleteLocations(slug);
+        expect(res).toBe("deleted");
     });
 });
  

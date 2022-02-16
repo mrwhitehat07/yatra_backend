@@ -47,6 +47,7 @@ const updateLocationImage = async (slug ,image, image_id) => {
 
 const deleteLocations = async (slug) => {
     await Location.deleteOne({ slug: slug });
+    return "deleted";
 }
 
 module.exports = {

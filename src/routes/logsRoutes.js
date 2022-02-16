@@ -85,8 +85,9 @@ router.put("/logs/:slug", [verifyToken], async (req, res) => {
     const title = req.body.title;
     const description = req.body.description;
     const visitDate = req.body.visitDate;
+    const slug = req.params.slug;
     try {
-        const logs = await updateLogs(uid, location, title, description, visitDate);        
+        const logs = await updateLogs(uid, slug, location, title, description, visitDate);        
         res.send({
             message: "logs created successfully", 
             data: logs
@@ -98,8 +99,9 @@ router.put("/logs/:slug", [verifyToken], async (req, res) => {
 
 router.put("/logs/:slug/image", [verifyToken, upload.single('image')], async (req, res) => {
     const image = req.file.path;
+    const slug = req.params.slug;
     try {
-        const logs = await updateLogsImage(uid, image);        
+        const logs = await updateLogsImage(uid, slug, image);        
         res.send({
             message: "logs created successfully", 
             data: logs
@@ -113,7 +115,7 @@ router.put("/logs/:slug/image", [verifyToken, upload.single('image')], async (re
 router.delete("/logs/:slug", [verifyToken], async (req, res) => {
     const slug = req.params.slug;
     try {
-        const logs = await deleteLogs(slug);
+        const logs = await deleteLogs(slug, uid);
         res.status(204).send({
             message: "logs deleted successfully", 
             data: logs
