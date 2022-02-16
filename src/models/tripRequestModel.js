@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
-const Status = require("../config/trip.config");
 
 const requestSchema = new mongoose.Schema({
+    sender: {
+        type: String,
+        ref: 'auth'
+    },
     trip: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "trip"

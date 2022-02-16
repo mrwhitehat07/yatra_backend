@@ -6,33 +6,62 @@ const getRequest = async (email) => {
     return user;
 }
 
-const sendRequest = async (uuid, location, title, description, visitDate) => {
-    await Logs.updateOne(
-        {  user: uuid },
-        { 
-            $set: {
-                location: (location != null) ? location : this.location,
-                title: (title != null) ? title : this.title,
-                description: (description != null) ? description : this.description,
-                visitDate: (visitDate != null) ? visitDate : this.visitDate
-            }
-        }
-    );
+const sendRequest = async (email, trip, uid) => {
+    const request = TripRequest({ 
+        user: email,
+        trip: trip,
+        sender: uid
+    });
+    await request.save();
+    return "request sent";
 }
 
-const acceptRequest = async (uuid, image) => {
-    await Logs.updateOne(
-        {  user: uuid },
-        { 
-            $set: {
-                image: (image != null) ? image : this.image,
+const acceptRequest = async (rid, tid, email) => {
+    try {
+        await TripRequest.updateOne(
+            { $and: [
+                    {_id: rid}, {user: email}
+                ]
+            },
+            {
+                $set: {
+                    isAccepted: true
+                }
             }
-        }
-    );
+        );
+        await Trip.updateOne(
+            { _id: tid },
+            {
+                $push: {
+                    members: [email]
+                }
+            }
+        )
+        return "accepted";
+    }
+    catch (e) {
+        return "cant accept";
+    }
 }
 
-const declineRequest = async (slug) => {
-    await Logs.deleteOne({ slug: slug });
+const declineRequest = async (rid, email) => {
+    try {
+        await TripRequest.updateOne(
+            { $and: [
+                    {_id: rid}, {user: email}
+                ]
+            },
+            {
+                $set: {
+                    isAccepted: false
+                }
+            }
+        );
+        return "declined";
+    }
+    catch (e) {
+        return "cant declined";
+    }
 }
 
 module.exports = {

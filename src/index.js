@@ -32,11 +32,13 @@ const profileRoutes = require("./routes/profileRoutes");
 const locationRoutes = require("./routes/locationRoutes");
 const logsRoutes = require("./routes/logsRoutes");
 const tripRoutes = require("./routes/tripRoutes");
+const requestRoutes = require("./routes/requestRoutes");
 app.use('/api', userRoutes);
 app.use('/api', profileRoutes);
 app.use('/api', locationRoutes);
 app.use('/api', logsRoutes);
 app.use('/api', tripRoutes);
+app.use('/api', requestRoutes);
 
 app.listen(port, () => {
     console.log("listening at port",port)

@@ -1,6 +1,5 @@
 const express = require("express");
 const { verifyToken } = require("../middlewares");
-const Request = require("../models/tripRequestModel");
 const router = express.Router();
 const { getRequest ,sendRequest, acceptRequest, declineRequest } = require("../controllers/requestController");
 
@@ -17,26 +16,29 @@ router.get("/requests", verifyToken, async (req, res) => {
 });
 
 router.post("/trip/:id/requests", verifyToken, async (req, res) => {
-    const title = req.body.title;
-    const description = req.body.description;
-    const address = req.body.address;
-    const visitDate = req.body.visitDate;
+    const trip = req.params.id;
+    const email = req.body.email;
+    const user = uid;
     try {
-        const trip = await sendRequest(uid, title, description, address, visitDate);        
-        res.status(201).send({ message: trip });
+        const request = await sendRequest(email, request, user.email);        
+        if(request == "request sent"){
+            res.status(201).send({ message: trip });
+        }
+        else {
+            res.status(500).send("Error occurred");
+        }
+
     } catch (error) {
         res.send(error);
     }  
 });
 
-router.put("/trip/:id", verifyToken, async (req, res) => {
-    const tid = req.params.id;
-    const location = req.body.address;
-    const title = req.body.title;
-    const description = req.body.description;
-    const visitDate = req.body.visitDate;
+router.put("/requests/:id", verifyToken, async (req, res) => {
+    const id = req.params.id;
+    const user = uid;
+    const tri = req.body.trip;
     try {
-        const trip = await acceptRequest(uid, tid, location, title, description, visitDate);        
+        const trip = await acceptRequest(id, tri, user.email);        
         res.send({
             message: trip, 
         });
@@ -45,10 +47,11 @@ router.put("/trip/:id", verifyToken, async (req, res) => {
     }
 });
 
-router.delete("/trip/:id", verifyToken, async (req, res) => {
+router.put("/requests/:id", verifyToken, async (req, res) => {
     const id = req.params.id;
+    const user = uid;
     try {
-        const trip = await declineRequest(uid, id);
+        const trip = await declineRequest(id, user.email);
         res.status(204).send({
             message: trip
         });
