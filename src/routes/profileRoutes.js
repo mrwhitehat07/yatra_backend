@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { createUserProfile, updateUserProfile, deleteUserProfile, updateUserProfileImage } = require("../controllers/userController");
 const Profile = require("../models/profileModel");
+const User = require("../models/userModel");
 const { verifyToken } = require("../middlewares");
 const upload = require("../config/multer.config");
 const Logs = require("../models/logsModel");
@@ -12,8 +13,8 @@ router.get('/profile', [verifyToken], async (req, res) => {
     try {
         const profiles = await Profile.findOne({ user: uid });
         if(profiles == null){
-            res.status(404).send({
-                message: "Profile doesnot exists please create one"
+            res.status(200).send({
+                message: "No Profile"
             });
         }
         else {
@@ -26,8 +27,9 @@ router.get('/profile', [verifyToken], async (req, res) => {
 
 router.get('/profile/detail', [verifyToken], async (req, res) => {
     try {
-        const user_id = uid;
+        const user_id = uid._id;
         const profiles = await Profile.findOne({ user: user_id });
+        const user = await User.findOne({ _id: user_id });
         const image = [];
         const logCount = await Logs.find({ user: user_id });
         const plans = await Trip.find({ $or: [
@@ -52,6 +54,7 @@ router.get('/profile/detail', [verifyToken], async (req, res) => {
 
         res.status(200).send({
             profile: profiles,
+            user: user,
             logImages: images,
             imageCount: image.length,
             logCount: logCount.length,
@@ -85,7 +88,7 @@ router.put('/profile', verifyToken, async (req, res) => {
     const bio = req.body.bio;
     const address = req.body.address;
     try {
-        const prof = await Profile.findOne({ user: uid });
+        // const prof = await Profile.findOne({ user: uid });
         const profiles = await updateUserProfile(uid, fullname, bio, address);        
         res.status(200).send({
             message: "profile updated successfully", 
@@ -98,7 +101,6 @@ router.put('/profile', verifyToken, async (req, res) => {
 
 router.put('/profile/image', [verifyToken, upload.single('avtar')], async (req, res) => {
     const avtar = req.file.path;
-    console.log(avtar);
     try {
         const result = await cloudinary.uploader.upload(avtar);
         const profiles = await updateUserProfileImage(uid, result.secure_url);        

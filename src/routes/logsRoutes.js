@@ -66,7 +66,6 @@ router.post("/logs", [verifyToken, upload.single('image')], async (req, res) => 
     const title = req.body.title;
     const description = req.body.description;
     const image = req.file.path;
-    console.log(image);
     const visitDate = req.body.visitDate;
     try {
         const result = await cloudinary.uploader.upload(image);

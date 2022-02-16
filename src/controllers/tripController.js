@@ -2,7 +2,7 @@ const Trip = require("../models/tripModel");
 const { isEmpty } = require("validator");
 
 const getTrips = async (uuid) => {
-    const trip = Trip.find({ host: uuid });
+    const trip = Trip.find({ $or: [{host: uuid}, {members: uuid}] });
     return trip;
 }
 

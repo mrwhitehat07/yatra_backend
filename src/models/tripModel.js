@@ -7,7 +7,7 @@ const tripSchema = new mongoose.Schema({
         ref: "auth"
     },
     members: [{
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: "auth"
     }],
     title: {
@@ -20,9 +20,6 @@ const tripSchema = new mongoose.Schema({
     address: {
         type: String,
         ref: "location"
-    },
-    invitationLink: {
-        type: String,
     },
     status: {
         type: String,
