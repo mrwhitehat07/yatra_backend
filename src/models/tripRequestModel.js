@@ -16,6 +16,10 @@ const requestSchema = new mongoose.Schema({
     isAccepted: {
         type: Boolean,
         default: false
+    },
+    isDeclined: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true,

@@ -21,8 +21,6 @@ router.post("/trip/:id/requests", verifyToken, async (req, res) => {
     const user = uid;
     try {
         const request = await sendRequest(email, trip, user.email);        
-        console.log(request)
-        console.log(user)
         if(request == "request sent"){
             res.status(201).send({ message: trip });
         }

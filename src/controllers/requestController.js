@@ -2,7 +2,11 @@ const TripRequest = require("../models/tripRequestModel");
 const Trip = require("../models/tripModel");
 
 const getRequest = async (email) => {
-    const request = await TripRequest.find({ user: email });
+    const request = await TripRequest.find({ $and: [
+        {user: email},
+        {isAccepted: false},
+        {isDeclined: false}
+    ] });
     return request;
 }
 
