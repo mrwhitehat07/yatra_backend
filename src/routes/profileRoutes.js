@@ -75,8 +75,7 @@ router.post('/profile', [verifyToken, upload.single('avtar')], async (req, res) 
         const result = await cloudinary.uploader.upload(avtar);
         const profiles = await createUserProfile(uid, fullname, bio, result.secure_url, address, result.public_id);        
         res.status(201).send({
-            message: "profile created successfully", 
-            data: profiles
+            message: profiles
         });
     } catch (error) {
         res.send(error);
@@ -88,11 +87,9 @@ router.put('/profile', verifyToken, async (req, res) => {
     const bio = req.body.bio;
     const address = req.body.address;
     try {
-        // const prof = await Profile.findOne({ user: uid });
         const profiles = await updateUserProfile(uid, fullname, bio, address);        
         res.status(200).send({
-            message: "profile updated successfully", 
-            data: profiles
+            message: profiles
         });
     } catch (error) {
         res.send(error);
@@ -105,8 +102,7 @@ router.put('/profile/image', [verifyToken, upload.single('avtar')], async (req, 
         const result = await cloudinary.uploader.upload(avtar);
         const profiles = await updateUserProfileImage(uid, result.secure_url);        
         res.status(200).send({
-            message: "profile updated successfully", 
-            data: profiles
+            message: profiles 
         });
     } catch (error) {
         res.send(error);

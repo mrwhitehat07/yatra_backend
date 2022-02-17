@@ -6,7 +6,7 @@ const { getRequest ,sendRequest, acceptRequest, declineRequest } = require("../c
 router.get("/requests", verifyToken, async (req, res) => {
     try {
        const requests = await getRequest(uid.email);
-       res.send({
+       res.status(200).send({
            count: requests.length,
            data: requests
         }); 
@@ -21,13 +21,7 @@ router.post("/trip/:id/requests", verifyToken, async (req, res) => {
     const user = uid;
     try {
         const request = await sendRequest(email, trip, user.email);        
-        if(request == "request sent"){
-            res.status(201).send({ message: trip });
-        }
-        else {
-            res.status(500).send("Error occurred");
-        }
-
+        res.status(201).send({ message: request });
     } catch (error) {
         res.send(error);
     }  

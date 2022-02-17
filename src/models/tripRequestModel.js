@@ -17,9 +17,9 @@ const requestSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    isDeclined: {
-        type: Boolean,
-        default: false
+    status: {
+        type: String,
+        default: "none"
     }
 }, {
     timestamps: true,

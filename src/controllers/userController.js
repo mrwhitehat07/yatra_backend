@@ -1,4 +1,3 @@
-const User = require("../models/userModel");
 const Profile = require("../models/profileModel");
 
 const createUserProfile = async (uuid, fullname, bio, avtar, address, avtar_id) => {
@@ -8,7 +7,7 @@ const createUserProfile = async (uuid, fullname, bio, avtar, address, avtar_id) 
         bio: bio,
         avtar: avtar,
         address: address,
-        avtar_id, avtar_id
+        avtar_id: avtar_id
     });
     await profile.save();
     return "created";
@@ -28,15 +27,17 @@ const updateUserProfile = async (uuid, fullname, bio, address) => {
     return "updated";
 }
 
-const updateUserProfileImage = async (uuid, avtar) => {
+const updateUserProfileImage = async (uuid, avtar, avtar_id) => {
     await Profile.updateOne(
         { user: uuid._id }, 
         { 
             $set: {
                 avtar: (avtar != null) ? avtar : this.avtar,
+                avtar_id: (avtar_id != null) ? avtar_id : this.avtar_id
             }
         },
     );
+    return "updated";
 }
 
 const deleteUserProfile = async (uuid) => {

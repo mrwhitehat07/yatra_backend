@@ -71,8 +71,7 @@ router.post("/logs", [verifyToken, upload.single('image')], async (req, res) => 
         const result = await cloudinary.uploader.upload(image);
         const logs = await createLogs(uid, location, title, description, result.secure_url, visitDate);        
         res.status(201).send({
-            message: "logs created successfully", 
-            data: logs
+            message: logs
         });
     } catch (error) {
         res.send(error);
@@ -89,8 +88,7 @@ router.put("/logs/:slug", [verifyToken], async (req, res) => {
     try {
         const logs = await updateLogs(uid, slug, location, title, description, visitDate);        
         res.send({
-            message: "logs created successfully", 
-            data: logs
+            message: logs
         });
     } catch (error) {
         res.send(error);
@@ -101,10 +99,10 @@ router.put("/logs/:slug/image", [verifyToken, upload.single('image')], async (re
     const image = req.file.path;
     const slug = req.params.slug;
     try {
-        const logs = await updateLogsImage(uid, slug, image);        
+        const result = await cloudinary.uploader.upload(image);
+        const logs = await updateLogsImage(uid, slug, result.secure_url);        
         res.send({
-            message: "logs created successfully", 
-            data: logs
+            message: logs
         });
     } catch (error) {
         res.send(error);
@@ -117,8 +115,7 @@ router.delete("/logs/:slug", [verifyToken], async (req, res) => {
     try {
         const logs = await deleteLogs(slug, uid);
         res.status(204).send({
-            message: "logs deleted successfully", 
-            data: logs
+            message: logs, 
         });
     } catch (error) {
        res.status(500).send(error);

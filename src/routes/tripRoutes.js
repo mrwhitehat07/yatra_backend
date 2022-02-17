@@ -33,18 +33,19 @@ router.get("/trip/:id/detail", verifyToken, async (req, res) => {
     try {
        const trip = await Trip.findOne({ _id: id });
        const host = await Profile.findOne({ user: trip.host });
-       const membersUser = [];
        const getUser = async () => {
-            for(let i=0; i<trip.members; i++){
-                let user = await User.findOne({ email: trip.members });
+            const membersUser = [];
+            for(let i=0; i<trip.members.length; i++){
+                let user = await User.findOne({ email: trip.members[i] });
                 let profile = await Profile.findOne({ user: user._id });
                 membersUser.push(profile)
             }
             return membersUser;
        }
+       console.log(trip.members)
 
-       const mems = getUser();
 
+       const mems = await getUser();
        res.send({
            trip: trip,
            members: mems,

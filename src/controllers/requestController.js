@@ -4,14 +4,19 @@ const Trip = require("../models/tripModel");
 const getRequest = async (email) => {
     const request = await TripRequest.find({ $and: [
         {user: email},
-        {isAccepted: false},
-        {isDeclined: false}
+        {status: "none"}
     ] });
     return request;
 }
 
 const sendRequest = async (email, trip, uid) => {
-    try {
+    const req = await TripRequest.findOne({
+        $and: [
+            { user: email },
+            { trip: trip }
+        ]
+    })
+    if (req === null) {
         const request = TripRequest({ 
             user: email,
             trip: trip,
@@ -20,8 +25,8 @@ const sendRequest = async (email, trip, uid) => {
         await request.save();
         return "request sent";
     }
-    catch (e) {
-        return e;
+    else {
+        return "request was sent already";
     }
 }
 
@@ -34,7 +39,8 @@ const acceptRequest = async (rid, tid, email) => {
             },
             {
                 $set: {
-                    isAccepted: true
+                    isAccepted: true,
+                    status: "accepted"
                 }
             }
         );
@@ -62,7 +68,7 @@ const declineRequest = async (rid, email) => {
             },
             {
                 $set: {
-                    isAccepted: false
+                    status: "declined",
                 }
             }
         );
