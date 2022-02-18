@@ -14,7 +14,6 @@ const authSchema = new mongoose.Schema({
     role: {
         type: String,
         default: ROLE.BASIC,
-        enum: ROLE,
     },
     isVerified: {
         type: Boolean,

@@ -75,7 +75,7 @@ router.post("/login", async (req, res) => {
 
 router.get("/verify/:token", [verifyUser], async (req, res) => {
     try{
-       const user = await User.findOne({ _id: uid });
+       const user = await User.findOne({ _id: uid._id });
        if (user.isVerified == true) {
             res.status(200).send({
                 message: "You are already a verified user."
@@ -126,9 +126,9 @@ router.post('/reset-password/:token', async (req, res) => {
     const newPassword = req.body.newPassword;
     const cnfPassword = req.body.cnfPassword;
     const userData = jwt.verify(token, process.env.VERIFICATION_KEY);
-    uid = User.findOne({ _id: userData.uuid })
+    uid = await User.findOne({ _id: userData.uuid })
     try {
-        const status = await resetPassword(uid, newPassword, cnfPassword);
+        const status = await resetPassword(uid._id, newPassword, cnfPassword);
         res.send({ message: status });
     } catch (error) {
         res.status(500).send(error)
@@ -137,12 +137,14 @@ router.post('/reset-password/:token', async (req, res) => {
 
 router.post('/verify-email', verifyToken, async (req, res) => {
     try {
-        const user = await User.findOne({ _id: uid });
+        const user = await User.findOne({ _id: uid._id });
+        const token = verificationToken(user._id);
         await sendMail(user.email, token);
         res.status(200).send({
             message: "email sent for verification, please check & verify",
         });
     } catch (error) {
+        console.log(error)
         res.status(500).send({
             message: "Internal server error"
         });

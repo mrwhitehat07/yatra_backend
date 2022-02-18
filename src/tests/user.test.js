@@ -15,12 +15,12 @@ afterAll(async () => {
 describe('User testing', () => {
     it('expect user register succeed', async () => {
         const userData = {
-            email: "user@test.com",
+            email: "user4@test.com",
             password: "user123"
         };
         return await User.create(userData)
         .then((res) => {
-            expect(res.email).toBe("user@test.com");
+            expect(res.email).toBe("user4@test.com");
         })
     });
 

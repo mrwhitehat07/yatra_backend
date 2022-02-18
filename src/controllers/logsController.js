@@ -20,10 +20,10 @@ const updateLogs = async (uuid, slug, location, title, description, visitDate) =
         {  $and: [{ slug: slug }, { user: uuid }] },
         { 
             $set: {
-                location: (location != null) ? location : this.location,
-                title: (title != null) ? title : this.title,
-                description: (description != null) ? description : this.description,
-                visitDate: (visitDate != null) ? visitDate : this.visitDate
+                location: (location != null || "") ? location : this.location,
+                title: (title != null || "") ? title : this.title,
+                description: (description != null || "") ? description : this.description,
+                visitDate: (visitDate != null || "") ? visitDate : this.visitDate
             }
         }
     );

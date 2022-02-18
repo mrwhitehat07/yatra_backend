@@ -21,7 +21,7 @@ describe('User profile testing', () => {
         const address = "nepal";
         const user = "61d709cc938de186d88dd331";
         const res = await createUserProfile(user, fullname, bio, image, address, image_id);
-        expect(res).toBe("created");
+        expect(res).toBe("profile already exists");
     });
 
     it('expect location update succeed', async () => {

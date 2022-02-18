@@ -23,9 +23,6 @@ const logsSchema = new mongoose.Schema({
     image: {
         type: String,
     },
-    ratings: {
-        type: Number
-    },
     visitDate: {
         required: true,
         type: Date,

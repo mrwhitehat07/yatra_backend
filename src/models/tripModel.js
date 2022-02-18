@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Status = require("../config/trip.config");
 
 const tripSchema = new mongoose.Schema({
     host: {
@@ -20,10 +19,6 @@ const tripSchema = new mongoose.Schema({
     address: {
         type: String,
         ref: "location"
-    },
-    status: {
-        type: String,
-        default: Status.ACTIVE,
     },
     visitDate: {
         type: Date,

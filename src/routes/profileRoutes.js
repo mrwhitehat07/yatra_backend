@@ -100,7 +100,7 @@ router.put('/profile/image', [verifyToken, upload.single('avtar')], async (req, 
     const avtar = req.file.path;
     try {
         const result = await cloudinary.uploader.upload(avtar);
-        const profiles = await updateUserProfileImage(uid, result.secure_url);        
+        const profiles = await updateUserProfileImage(uid, result.secure_url, result.public_id);        
         res.status(200).send({
             message: profiles 
         });

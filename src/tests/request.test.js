@@ -16,9 +16,9 @@ describe('Trip member request testing', () => {
     it('expect request sent to join successfully', async () => {
         const trip = "620c47bc9b1e8d35d3fe246e";
         const user = "bishal@gmail.com";
-        const sender = "";
+        const sender = "mbishal605@gmail.com";
         const res = await sendRequest(user, trip, sender);
-        expect(res).toBe("request sent");
+        expect(res).toBe("request was sent already");
     });
 
     it('expect request accepted', async () => {
